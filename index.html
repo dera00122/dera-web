@@ -117,7 +117,44 @@
   .btn-whatsapp{background:#1E2D4D;color:#fff;}
   .btn-whatsapp:hover{transform:translateY(-2px);background:var(--navy-deep);}
   .nav-cta{display:flex;gap:12px;}
-  .nav-toggle{display:none;}
+  .nav-toggle{
+    display:none;
+    background:none;border:none;cursor:pointer;
+    width:38px;height:38px;
+    align-items:center;justify-content:center;
+    color:var(--navy);
+  }
+  .mobile-nav{
+    display:flex;
+    position:fixed;top:0;right:0;bottom:0;
+    width:min(78vw,320px);
+    background:var(--cream);
+    z-index:100;
+    box-shadow:-8px 0 30px rgba(22,35,59,.18);
+    padding:24px 24px 32px;
+    flex-direction:column;
+    gap:4px;
+    transform:translateX(100%);
+    transition:transform .3s ease;
+  }
+  .mobile-nav.open{transform:translateX(0);}
+  .mobile-nav-close{
+    align-self:flex-end;background:none;border:none;
+    width:38px;height:38px;color:var(--navy);cursor:pointer;
+    margin-bottom:16px;
+  }
+  .mobile-nav a{
+    font-size:17px;font-weight:600;color:var(--navy);
+    padding:14px 4px;border-bottom:1px solid var(--line);
+  }
+  .mobile-nav .nav-cta{flex-direction:column;margin-top:20px;}
+  .mobile-nav .btn{justify-content:center;}
+  .nav-overlay{
+    display:none;
+    position:fixed;inset:0;background:rgba(13,22,38,.4);
+    z-index:99;
+  }
+  .nav-overlay.open{display:block;}
 
   /* HERO */
   .hero{
@@ -378,6 +415,8 @@
     .why-grid{grid-template-columns:1fr 1fr;}
     .contact-grid{grid-template-columns:1fr;}
     .nav-links{display:none;}
+    header .nav-cta{display:none;}
+    .nav-toggle{display:flex;}
   }
   @media (max-width:520px){
     .why-grid{grid-template-columns:1fr;}
@@ -405,8 +444,28 @@
       <a class="btn btn-outline" href="#contact">Get a Quote</a>
       <a class="btn btn-gold" href="https://wa.me/2347048445279?text=Hi%20Bigdera%2C%20I%27d%20like%20to%20talk%20about%20a%20project." target="_blank" rel="noopener">Let's Get Started</a>
     </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
   </nav>
 </header>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="navClose" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <a href="#services">What We Do</a>
+  <a href="#portfolio">Our Work</a>
+  <a href="#process">Process</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#faq">FAQ</a>
+  <a href="#contact">Contact</a>
+  <div class="nav-cta">
+    <a class="btn btn-outline" href="#contact">Get a Quote</a>
+    <a class="btn btn-gold" href="https://wa.me/2347048445279?text=Hi%20Bigdera%2C%20I%27d%20like%20to%20talk%20about%20a%20project." target="_blank" rel="noopener">Let's Get Started</a>
+  </div>
+</div>
 
 <section class="hero">
   <div class="wrap">
@@ -778,6 +837,29 @@
       document.getElementById('servicesGrid').scrollIntoView({behavior:'smooth', block:'start'});
     }
   }
+
+  // Mobile nav drawer
+  const navToggle = document.getElementById('navToggle');
+  const navClose = document.getElementById('navClose');
+  const mobileNav = document.getElementById('mobileNav');
+  const navOverlay = document.getElementById('navOverlay');
+
+  function openNav(){
+    mobileNav.classList.add('open');
+    navOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeNav(){
+    mobileNav.classList.remove('open');
+    navOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  if(navToggle) navToggle.addEventListener('click', openNav);
+  if(navClose) navClose.addEventListener('click', closeNav);
+  if(navOverlay) navOverlay.addEventListener('click', closeNav);
+  document.querySelectorAll('.mobile-nav a').forEach(link=>{
+    link.addEventListener('click', closeNav);
+  });
 </script>
 
 </body>
